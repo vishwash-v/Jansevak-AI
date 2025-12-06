@@ -23,3 +23,12 @@ export interface StatCard {
   color: 'green' | 'orange' | 'blue' | 'purple';
   icon: any;
 }
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  time: string;
+  read: boolean;
+  type: 'info' | 'success' | 'alert';
+}

@@ -1,4 +1,4 @@
-import { Scheme, StatCard } from './types';
+import { Scheme, StatCard, Notification } from './types';
 import { CheckCircle, Clock, ThumbsUp, IndianRupee, FileText, Briefcase, GraduationCap, Home } from 'lucide-react';
 
 export const MOCK_USER = {
@@ -7,6 +7,15 @@ export const MOCK_USER = {
   pendingApplications: 12,
   language: "Hindi"
 };
+
+export const INDIAN_STATES = [
+  'Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 
+  'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 
+  'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 
+  'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 
+  'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 
+  'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
+];
 
 export const SCHEMES: Scheme[] = [
   {
@@ -167,5 +176,40 @@ export const DOCUMENTS = [
     issuer: 'Pending Verification',
     date: '2024-01-10',
     icon: FileText
+  }
+];
+
+export const NOTIFICATIONS: Notification[] = [
+  { 
+    id: '1', 
+    title: 'Application Update', 
+    message: 'Your PM Scholarship application has moved to the verification stage.', 
+    time: '2 hours ago', 
+    read: false, 
+    type: 'info' 
+  },
+  { 
+    id: '2', 
+    title: 'New Scheme Alert', 
+    message: 'You are now eligible for the PM Vishwakarma Yojana based on your profile.', 
+    time: '1 day ago', 
+    read: false, 
+    type: 'success' 
+  },
+  { 
+    id: '3', 
+    title: 'Document Action', 
+    message: 'Please upload your Income Certificate to complete your profile.', 
+    time: '2 days ago', 
+    read: true, 
+    type: 'alert' 
+  },
+  { 
+    id: '4', 
+    title: 'Benefit Received', 
+    message: '₹2000 has been credited to your bank account for PM Kisan Samman Nidhi.', 
+    time: '3 days ago', 
+    read: true, 
+    type: 'success' 
   }
 ];

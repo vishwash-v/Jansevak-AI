@@ -1,15 +1,38 @@
-
-import React, { useState } from 'react';
-import { Bell, Search, Mic, ArrowRight, Settings, SlidersHorizontal } from 'lucide-react';
-import { MOCK_USER, SCHEMES, STATS } from '../constants';
+import React, { useState, useEffect, useRef } from 'react';
+import { Bell, Search, Mic, ArrowRight, Settings, SlidersHorizontal, Check, Info, AlertCircle } from 'lucide-react';
+import { MOCK_USER, SCHEMES, STATS, NOTIFICATIONS, INDIAN_STATES } from '../constants';
 import { Scheme } from '../types';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
 const Dashboard: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState<string>('All');
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [location, setLocation] = useState(MOCK_USER.location);
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
+  
+  const notificationRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  const unreadCount = NOTIFICATIONS.filter(n => !n.read).length;
+
+  // Click outside handlers
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+      if (locationRef.current && !locationRef.current.contains(event.target as Node)) {
+        setIsLocationOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const getStatusColor = (status: Scheme['status']) => {
     switch (status) {
@@ -48,12 +71,63 @@ const Dashboard: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('welcome')}, {MOCK_USER.name}!</h2>
           <p className="text-gray-500 dark:text-gray-400 mt-1">{t('dash.subtitle')}</p>
         </div>
-        <div className="flex items-center space-x-3">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700">
-            <Bell size={18} />
-            <span className="hidden sm:inline">{t('dash.notifications')}</span>
-            <span className="bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full ml-1">3</span>
-          </button>
+        <div className="flex items-center space-x-3 relative">
+          <div ref={notificationRef} className="relative">
+            <button 
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="flex items-center space-x-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
+              <Bell size={18} />
+              <span className="hidden sm:inline">{t('dash.notifications')}</span>
+              {unreadCount > 0 && (
+                <span className="bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full ml-1">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 z-50 overflow-hidden animate-fade-in-up">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                  <h3 className="font-bold text-gray-900 dark:text-white">Notifications</h3>
+                  <button className="text-xs text-orange-600 dark:text-orange-400 font-medium hover:underline">Mark all as read</button>
+                </div>
+                <div className="max-h-[400px] overflow-y-auto">
+                   {NOTIFICATIONS.map((notif) => (
+                     <div key={notif.id} className={`p-4 border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors cursor-pointer ${!notif.read ? 'bg-orange-50/50 dark:bg-orange-900/10' : ''}`}>
+                       <div className="flex gap-3">
+                         <div className={`mt-1 shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                           notif.type === 'success' ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' :
+                           notif.type === 'alert' ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400' :
+                           'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                         }`}>
+                            {notif.type === 'success' ? <Check size={14} /> : notif.type === 'alert' ? <AlertCircle size={14} /> : <Info size={14} />}
+                         </div>
+                         <div>
+                           <div className="flex justify-between items-start">
+                             <h4 className={`text-sm font-semibold ${!notif.read ? 'text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300'}`}>
+                               {notif.title}
+                             </h4>
+                             <span className="text-[10px] text-gray-400 whitespace-nowrap ml-2">{notif.time}</span>
+                           </div>
+                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+                             {notif.message}
+                           </p>
+                         </div>
+                       </div>
+                     </div>
+                   ))}
+                </div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-900/50 text-center">
+                  <button className="text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    View All Notifications
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <button 
             onClick={() => navigate('/voice')}
             className="flex items-center space-x-2 px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium shadow-md hover:bg-orange-600 transition-colors"
@@ -78,9 +152,10 @@ const Dashboard: React.FC = () => {
               <img src={`https://api.dicebear.com/7.x/bottts/svg?seed=jansevak`} alt="AI" className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-2">{t('landing.hero.subtitle').split('.')[0]}</h3>
+              {/* Updated Text using specific translation keys */}
+              <h3 className="text-xl font-bold mb-2">{t('dash.hero.title')}</h3>
               <p className="text-blue-100 text-sm leading-relaxed max-w-2xl">
-                 {t('landing.hero.subtitle').split('!')[1] || t('landing.hero.subtitle')}
+                 {t('dash.hero.subtitle')}
               </p>
             </div>
           </div>
@@ -172,11 +247,44 @@ const Dashboard: React.FC = () => {
             })}
           </div>
           <div className="flex gap-2">
-            <button className="flex items-center space-x-2 px-3 py-1.5 border border-gray-200 dark:border-gray-600 rounded-md text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
-              <div className="flex items-center gap-1">
-                Map <span className="text-gray-400 dark:text-gray-600">|</span> Maharashtra
-              </div>
-            </button>
+            <div ref={locationRef} className="relative">
+              <button 
+                onClick={() => setIsLocationOpen(!isLocationOpen)}
+                className="flex items-center space-x-2 px-3 py-1.5 border border-gray-200 dark:border-gray-600 rounded-md text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <div className="flex items-center gap-1">
+                  Map <span className="text-gray-400 dark:text-gray-600">|</span> {location}
+                </div>
+              </button>
+
+              {/* Location Dropdown */}
+              {isLocationOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 z-50 overflow-hidden animate-fade-in origin-top-right">
+                  <div className="p-3 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider">Select Region</h3>
+                  </div>
+                  <div className="max-h-60 overflow-y-auto">
+                    {INDIAN_STATES.map((state) => (
+                      <button
+                        key={state}
+                        onClick={() => {
+                          setLocation(state);
+                          setIsLocationOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-xs hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex justify-between items-center ${
+                          location === state 
+                            ? 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/10 font-bold' 
+                            : 'text-gray-700 dark:text-gray-300'
+                        }`}
+                      >
+                        {state}
+                        {location === state && <Check size={14} />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -246,7 +354,7 @@ const Dashboard: React.FC = () => {
 
               <div className="col-span-1 text-right">
                 <button 
-                  onClick={() => navigate(`/scheme/${scheme.id}`)}
+                  onClick={() => navigate(scheme.status === 'Pending' ? '/applications' : `/scheme/${scheme.id}`)}
                   className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 flex items-center justify-end gap-1 ml-auto"
                 >
                   {scheme.status === 'Not Started' ? t('dash.action.apply') : 
