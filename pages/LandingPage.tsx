@@ -21,19 +21,19 @@ const LandingPage: React.FC = () => {
             <span className="font-bold text-xl text-gray-900 dark:text-white">{t('app.name')}</span>
           </div>
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-600 dark:text-gray-300">
-            <a href="#features" className="hover:text-orange-600 dark:hover:text-orange-400">Features</a>
-            <a href="#languages" className="hover:text-orange-600 dark:hover:text-orange-400">Languages</a>
-            <a href="#schemes" className="hover:text-orange-600 dark:hover:text-orange-400">Schemes</a>
-            <a href="#about" className="hover:text-orange-600 dark:hover:text-orange-400">About</a>
+            <a href="#features" className="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">Features</a>
+            <a href="#languages" className="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">Languages</a>
+            <a href="#schemes" className="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">Schemes</a>
+            <a href="#about" className="hover:text-orange-600 dark:hover:text-orange-400 transition-colors">About</a>
           </div>
           <div className="flex items-center space-x-4">
              <ThemeToggle />
-            <button onClick={() => navigate('/login')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+            <button onClick={() => navigate('/login')} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
               {t('auth.signin')}
             </button>
             <button 
               onClick={() => navigate('/register')}
-              className="px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all"
+              className="px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full text-sm font-medium shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
             >
               {t('auth.getStarted')}
             </button>
@@ -69,14 +69,14 @@ const LandingPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <button 
                   onClick={() => navigate('/login')}
-                  className="flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-semibold shadow-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-all"
+                  className="flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-semibold shadow-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all hover:scale-105 active:scale-95"
                 >
                   <Mic size={20} className="text-green-400 dark:text-green-600" />
                   {t('landing.hero.voice')}
                 </button>
                 <button 
                   onClick={() => navigate('/login')}
-                  className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-full font-semibold shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+                  className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-full font-semibold shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-105 active:scale-95"
                 >
                   {t('landing.hero.type')}
                 </button>
@@ -180,8 +180,8 @@ const LandingPage: React.FC = () => {
               color: "bg-blue-600"
             }
           ].map((feature, idx) => (
-            <div key={idx} className="p-8 rounded-2xl border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow bg-white dark:bg-gray-900">
-              <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center text-white mb-6 shadow-lg`}>
+            <div key={idx} className="p-8 rounded-2xl border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-900 dark:hover:bg-gray-800 dark:hover:border-gray-700 group">
+              <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center text-white mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                 <feature.icon size={28} />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature.title}</h3>
@@ -200,14 +200,14 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Language Grid */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-900 transition-colors">
+      <section id="languages" className="py-24 bg-gray-50 dark:bg-gray-900 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12">Speak Your Language</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
              {['हिंदी', 'বাংলা', 'తెలుగు', 'मराठी', 'தமிழ்', 'ગુજરાતી', 'ಕನ್ನಡ', 'മലയാളം', 'Odia', 'Punjabi', 'اردو', 'অসমীয়া'].map((lang, idx) => (
-               <div key={idx} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-orange-500 transition-colors cursor-default">
+               <div key={idx} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 dark:hover:bg-gray-700 transition-all cursor-default transform hover:-translate-y-1">
                  <h4 className="text-lg font-bold text-gray-800 dark:text-white mb-1">{lang}</h4>
-                 <p className="text--[10px] text-gray-400 uppercase tracking-wider">Supported</p>
+                 <p className="text-[10px] text-gray-400 uppercase tracking-wider">Supported</p>
                </div>
              ))}
           </div>
@@ -224,13 +224,13 @@ const LandingPage: React.FC = () => {
           <div className="flex justify-center gap-4">
             <button 
               onClick={() => navigate('/register')}
-              className="px-8 py-4 bg-white text-orange-600 rounded-full font-bold shadow-lg hover:bg-gray-100 transition-all flex items-center gap-2"
+              className="px-8 py-4 bg-white text-orange-600 rounded-full font-bold shadow-lg hover:bg-gray-100 transition-all flex items-center gap-2 hover:scale-105 active:scale-95"
             >
               {t('landing.cta.btn')} <ArrowRight size={20} />
             </button>
             <button 
               onClick={() => navigate('/login')}
-              className="px-8 py-4 bg-transparent border border-white text-white rounded-full font-bold hover:bg-white/10 transition-all flex items-center gap-2"
+              className="px-8 py-4 bg-transparent border border-white text-white rounded-full font-bold hover:bg-white/10 transition-all flex items-center gap-2 hover:scale-105 active:scale-95"
             >
               <PlayCircle size={20} /> {t('landing.cta.demo')}
             </button>
@@ -253,24 +253,24 @@ const LandingPage: React.FC = () => {
           <div>
             <h4 className="font-bold mb-4 text-sm uppercase text-gray-500">Product</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white">Features</a></li>
-              <li><a href="#" className="hover:text-white">Languages</a></li>
-              <li><a href="#" className="hover:text-white">Schemes Database</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Languages</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Schemes Database</a></li>
             </ul>
           </div>
            <div>
             <h4 className="font-bold mb-4 text-sm uppercase text-gray-500">Resources</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white">Help Center</a></li>
-              <li><a href="#" className="hover:text-white">User Guide</a></li>
-              <li><a href="#" className="hover:text-white">Contact Support</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">User Guide</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Contact Support</a></li>
             </ul>
           </div>
            <div>
             <h4 className="font-bold mb-4 text-sm uppercase text-gray-500">Legal</h4>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
             </ul>
           </div>
         </div>

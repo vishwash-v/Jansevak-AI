@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell, Search, Mic, ArrowRight, Settings, SlidersHorizontal, Check, Info, AlertCircle } from 'lucide-react';
 import { MOCK_USER, SCHEMES, STATS, NOTIFICATIONS, INDIAN_STATES } from '../constants';
@@ -140,11 +141,6 @@ const Dashboard: React.FC = () => {
 
       {/* Voice/Search Hero Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8 shadow-xl">
-        <div className="absolute top-0 right-0 opacity-10">
-          <svg width="400" height="400" viewBox="0 0 200 200">
-            <path fill="currentColor" d="M45,-78C59,-69,71,-57,79,-43C87,-29,91,-13,89,3C87,19,79,35,68,48C57,61,43,71,28,76C13,81,-3,81,-18,78C-33,75,-47,69,-59,58C-71,47,-81,31,-83,14C-85,-3,-79,-20,-69,-34C-59,-48,-45,-59,-31,-68C-17,-77,-1,-84,15,-84L15,-78Z" transform="translate(100 100)" />
-          </svg>
-        </div>
         
         <div className="relative z-10 max-w-4xl">
           <div className="flex items-start space-x-4 mb-6">

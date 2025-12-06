@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Camera, Save, Bell, Globe, Shield } from 'lucide-react';
 import { MOCK_USER } from '../constants';
 import { useLanguage } from '../context/LanguageContext';
@@ -8,6 +8,9 @@ const ProfilePage: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [profileImage, setProfileImage] = useState(`https://api.dicebear.com/7.x/avataaars/svg?seed=${MOCK_USER.name}`);
+  
   const [user, setUser] = useState({
     name: MOCK_USER.name,
     email: 'rajesh.kumar@example.com',
@@ -30,6 +33,18 @@ const ProfilePage: React.FC = () => {
     }, 1500);
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       <div>
@@ -45,13 +60,23 @@ const ProfilePage: React.FC = () => {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm text-center h-full flex flex-col justify-center">
             <div className="relative inline-block mb-4 mx-auto">
               <img 
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} 
+                src={profileImage} 
                 alt="Profile" 
-                className="w-32 h-32 rounded-full bg-gray-100 dark:bg-gray-700"
+                className="w-32 h-32 rounded-full bg-gray-100 dark:bg-gray-700 object-cover"
               />
-              <button className="absolute bottom-0 right-0 p-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 border-4 border-white dark:border-gray-800 transition-colors">
+              <button 
+                onClick={triggerFileInput}
+                className="absolute bottom-0 right-0 p-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 border-4 border-white dark:border-gray-800 transition-colors"
+              >
                 <Camera size={16} />
               </button>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
             </div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">{user.name}</h3>
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">{user.location}</p>
